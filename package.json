@@ -1,0 +1,20 @@
+{
+  "name": "thumbnailer",
+  "version": "0.0.0",
+  "description": "make image thumbnails",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/ --recursive --require require/enable-power-assert.js",
+    "coverage": "istanbul cover _mocha -- test/ --recursive --require require/enable-power-assert.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies" : {
+    "gm" : "1.17.0"
+  },
+  "devDependencies" : {
+    "sinon" : "1.11.1",
+    "power-assert" : "0.10.0",
+    "espower-loader" : "0.10.0"
+  }
+}
