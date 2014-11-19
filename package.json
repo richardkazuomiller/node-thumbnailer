@@ -1,5 +1,5 @@
 {
-  "name": "thumbnailer",
+  "name": "node-thumbnailer",
   "version": "0.0.0",
   "description": "make image thumbnails",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "mocha test/ --recursive --require require/enable-power-assert.js",
     "coverage": "istanbul cover _mocha -- test/ --recursive --require require/enable-power-assert.js"
   },
-  "author": "",
+  "author": "Richard Kazuo Miller",
   "license": "MIT",
   "dependencies" : {
     "gm" : "1.17.0"
