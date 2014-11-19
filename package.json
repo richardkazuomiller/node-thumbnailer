@@ -1,6 +1,6 @@
 {
   "name": "node-thumbnailer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "make image thumbnails",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,10 @@
   "license": "MIT",
   "dependencies" : {
     "gm" : "1.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/richardkazuomiller/node-thumbnailer.git"
   },
   "devDependencies" : {
     "sinon" : "1.11.1",
