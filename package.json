@@ -1,6 +1,6 @@
 {
   "name": "node-thumbnailer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "make image thumbnails",
   "main": "index.js",
   "scripts": {
