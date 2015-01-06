@@ -78,6 +78,20 @@ describe('lib/thumbnailer',function(){
       assert(gm.calledWith('input.jpg'))
       assert(size.getCall(0).calledWith(done))
     })
+    describe('with sharp',function(){
+      it('should sharp.metadata',function(){
+        var metadata = sinon.stub()
+        this.thumbnailer.sharp = true
+        sinon.stub(this.thumbnailer,'_sharp',function(){
+          return {
+            metadata : metadata
+          }
+        })
+        var done = sinon.stub()
+        this.thumbnailer.size('input.jpg',done)
+        assert(metadata.calledWith(done))
+      })
+    })
   })
   describe('cropMiddleSquare',function(){
     it('should crop a square out of a portrait',function(){
