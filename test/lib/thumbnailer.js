@@ -6,6 +6,16 @@ describe('lib/thumbnailer',function(){
     var Thumbnailer = require('../../lib/thumbnailer')
     this.thumbnailer = new Thumbnailer()
   })
+  describe('constructor',function(){
+    it('should include sharp if given',function(){
+      var Thumbnailer = require('../../lib/thumbnailer')
+      var sharp = {}
+      var thumbnailer = new Thumbnailer({
+        sharp : sharp
+      })
+      assert(thumbnailer.sharp == sharp)
+    })
+  })
   describe('create',function(){
     it('should just instantiate a thumbnailer',function(){
       var Thumbnailer = require('../../lib/thumbnailer')
