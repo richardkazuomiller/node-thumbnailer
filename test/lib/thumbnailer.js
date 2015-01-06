@@ -114,4 +114,13 @@ describe('lib/thumbnailer',function(){
       assert(this.thumbnailer.gm.callCount == 0)
     })
   })
+  describe('_sharp',function(){
+    it('should call sharp',function(){
+      this.thumbnailer.sharp = sinon.stub()
+      this.thumbnailer._sharp(1,2,3)
+      assert(this.thumbnailer.sharp.getCall(0).args[0] == 1)
+      assert(this.thumbnailer.sharp.getCall(0).args[1] == 2)
+      assert(this.thumbnailer.sharp.getCall(0).args[2] == 3)
+    })
+  })
 })
