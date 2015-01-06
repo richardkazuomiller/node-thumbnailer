@@ -66,6 +66,25 @@ describe('lib/thumbnailer',function(){
       assert(write.getCall(0).args[0] == 'output.jpg')
       assert(done.calledWith('an error'))
     })
+    describe('with sharp',function(){
+      it('should sharp.extract',function(){
+        var toFile = sinon.stub()
+        var extract = sinon.stub().returns({
+          toFile : toFile
+        })
+        var sharp = sinon.stub(this.thumbnailer,'_sharp').returns({
+          extract : extract
+        })
+        var done = sinon.stub()
+        this.thumbnailer.sharp = true
+        this.thumbnailer.crop('input.jpg',1920,1080,50,100,'output.jpg',done)
+        toFile.getCall(0).args[1]('an error')
+        assert(sharp.calledWith('input.jpg'))
+        assert(extract.calledWith(100,50,1920,1080))
+        assert(toFile.getCall(0).args[0] == 'output.jpg')
+        assert(done.calledWith('an error'))
+      })
+    })
   })
   describe('size',function(){
     it('should gm.size',function(){
