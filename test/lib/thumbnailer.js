@@ -6,6 +6,16 @@ describe('lib/thumbnailer',function(){
     var Thumbnailer = require('../../lib/thumbnailer')
     this.thumbnailer = new Thumbnailer()
   })
+  describe('constructor',function(){
+    it('should include sharp if given',function(){
+      var Thumbnailer = require('../../lib/thumbnailer')
+      var sharp = {}
+      var thumbnailer = new Thumbnailer({
+        sharp : sharp
+      })
+      assert(thumbnailer.sharp == sharp)
+    })
+  })
   describe('create',function(){
     it('should just instantiate a thumbnailer',function(){
       var Thumbnailer = require('../../lib/thumbnailer')
@@ -38,6 +48,30 @@ describe('lib/thumbnailer',function(){
       assert(write.getCall(0).args[0] == 'output.jpg')
       assert(done.calledWith('an error'))
     })
+    describe('with sharp',function(){
+      it('should resize to width, then height',function(){
+        var toFile = sinon.stub()
+        var resize = sinon.stub()
+        resize.returns({
+          resize : resize,
+          toFile : toFile
+        })
+        var sharp = sinon.stub(this.thumbnailer,'_sharp').returns({
+          resize : resize
+        })
+        var done = sinon.stub()
+        this.thumbnailer.sharp = true
+        this.thumbnailer.resize('input.jpg',1920,1080,'output.jpg',done)
+        toFile.getCall(0).args[1]('an error')
+        assert(sharp.calledWith('input.jpg'))
+        assert(resize.getCall(0).args[0] == 1920)
+        assert(resize.getCall(0).args[1] == null)
+        assert(resize.getCall(1).args[0] == null)
+        assert(resize.getCall(1).args[1] == 1080)
+        assert(toFile.getCall(0).args[0] == 'output.jpg')
+        assert(done.calledWith('an error'))
+      })
+    })
   })
   describe('crop',function(){
     it('should gm.crop to width by height at x,y',function(){
@@ -56,6 +90,25 @@ describe('lib/thumbnailer',function(){
       assert(write.getCall(0).args[0] == 'output.jpg')
       assert(done.calledWith('an error'))
     })
+    describe('with sharp',function(){
+      it('should sharp.extract',function(){
+        var toFile = sinon.stub()
+        var extract = sinon.stub().returns({
+          toFile : toFile
+        })
+        var sharp = sinon.stub(this.thumbnailer,'_sharp').returns({
+          extract : extract
+        })
+        var done = sinon.stub()
+        this.thumbnailer.sharp = true
+        this.thumbnailer.crop('input.jpg',1920,1080,50,100,'output.jpg',done)
+        toFile.getCall(0).args[1]('an error')
+        assert(sharp.calledWith('input.jpg'))
+        assert(extract.calledWith(100,50,1920,1080))
+        assert(toFile.getCall(0).args[0] == 'output.jpg')
+        assert(done.calledWith('an error'))
+      })
+    })
   })
   describe('size',function(){
     it('should gm.size',function(){
@@ -67,6 +120,20 @@ describe('lib/thumbnailer',function(){
       this.thumbnailer.size('input.jpg',done)
       assert(gm.calledWith('input.jpg'))
       assert(size.getCall(0).calledWith(done))
+    })
+    describe('with sharp',function(){
+      it('should sharp.metadata',function(){
+        var metadata = sinon.stub()
+        this.thumbnailer.sharp = true
+        sinon.stub(this.thumbnailer,'_sharp',function(){
+          return {
+            metadata : metadata
+          }
+        })
+        var done = sinon.stub()
+        this.thumbnailer.size('input.jpg',done)
+        assert(metadata.calledWith(done))
+      })
     })
   })
   describe('cropMiddleSquare',function(){
@@ -102,6 +169,15 @@ describe('lib/thumbnailer',function(){
       assert(done.calledWith('an error'))
       assert(done.callCount == 1)
       assert(this.thumbnailer.gm.callCount == 0)
+    })
+  })
+  describe('_sharp',function(){
+    it('should call sharp',function(){
+      this.thumbnailer.sharp = sinon.stub()
+      this.thumbnailer._sharp(1,2,3)
+      assert(this.thumbnailer.sharp.getCall(0).args[0] == 1)
+      assert(this.thumbnailer.sharp.getCall(0).args[1] == 2)
+      assert(this.thumbnailer.sharp.getCall(0).args[2] == 3)
     })
   })
 })
