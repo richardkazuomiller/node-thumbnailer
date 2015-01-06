@@ -48,6 +48,30 @@ describe('lib/thumbnailer',function(){
       assert(write.getCall(0).args[0] == 'output.jpg')
       assert(done.calledWith('an error'))
     })
+    describe('with sharp',function(){
+      it('should resize to width, then height',function(){
+        var toFile = sinon.stub()
+        var resize = sinon.stub()
+        resize.returns({
+          resize : resize,
+          toFile : toFile
+        })
+        var sharp = sinon.stub(this.thumbnailer,'_sharp').returns({
+          resize : resize
+        })
+        var done = sinon.stub()
+        this.thumbnailer.sharp = true
+        this.thumbnailer.resize('input.jpg',1920,1080,'output.jpg',done)
+        toFile.getCall(0).args[1]('an error')
+        assert(sharp.calledWith('input.jpg'))
+        assert(resize.getCall(0).args[0] == 1920)
+        assert(resize.getCall(0).args[1] == null)
+        assert(resize.getCall(1).args[0] == null)
+        assert(resize.getCall(1).args[1] == 1080)
+        assert(toFile.getCall(0).args[0] == 'output.jpg')
+        assert(done.calledWith('an error'))
+      })
+    })
   })
   describe('crop',function(){
     it('should gm.crop to width by height at x,y',function(){
